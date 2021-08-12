@@ -539,9 +539,9 @@ public class Solution {
             }
         } else {
             chars[index] = '(';
-            generateALL(chars,index+1,result);
+            generateALL(chars, index + 1, result);
             chars[index] = ')';
-            generateALL(chars,index+1,result);
+            generateALL(chars, index + 1, result);
         }
     }
 
@@ -563,12 +563,13 @@ public class Solution {
 
     /**
      * 括号生成（回溯法）
+     *
      * @param n
      * @return
      */
     public static List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
-        backtrack(new StringBuffer(),res,0,0,n);
+        backtrack(new StringBuffer(), res, 0, 0, n);
         return res;
     }
 
@@ -579,14 +580,89 @@ public class Solution {
         }
         if (left < n) {
             cur.append('(');
-            backtrack(cur,res,left+1,right,n);
-            cur.deleteCharAt(cur.length()-1);
+            backtrack(cur, res, left + 1, right, n);
+            cur.deleteCharAt(cur.length() - 1);
         }
         if (right < left) {
             cur.append(')');
-            backtrack(cur,res,left,right+1,n);
-            cur.deleteCharAt(cur.length()-1);
+            backtrack(cur, res, left, right + 1, n);
+            cur.deleteCharAt(cur.length() - 1);
         }
+    }
+
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
+     * 二叉树先序遍历(递归法)
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> preorderTraversal1(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        preOrder(root, res);
+        return res;
+    }
+
+    private void preOrder(TreeNode root, List<Integer> res) {
+        if (root == null) {
+            return;
+        }
+        res.add(root.val);
+        preOrder(root.left, res);
+        preOrder(root.right, res);
+    }
+
+
+    /**
+     * 二叉树的先序遍历（数据结构法）
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
+        while (!stack.isEmpty() || node != null) {
+            while (node != null) {
+                res.add(node.val);
+                stack.push(node);
+            }
+            node = stack.pop();
+            node = node.right;
+        }
+        return res;
+    }
+
+    /**
+     * 二叉树展开为链表
+     *
+     * @param root
+     */
+    public void flatten(TreeNode root) {
+
     }
 
 
