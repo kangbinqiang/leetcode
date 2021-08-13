@@ -6,7 +6,7 @@ public class Solution {
 
 
     /**
-     * »ñÈ¡×Ö·û´®×î³¤µÄ¹«¹²Ç°×º
+     * è·å–å­—ç¬¦ä¸²æœ€é•¿çš„å…¬å…±å‰ç¼€
      *
      * @param strs
      * @return
@@ -45,7 +45,7 @@ public class Solution {
     }
 
     /**
-     * ºÏ²¢Á½¸öÓĞĞòÁ´±í
+     * åˆå¹¶ä¸¤ä¸ªæœ‰åºé“¾è¡¨
      *
      * @param l1
      * @param l2
@@ -66,7 +66,7 @@ public class Solution {
     }
 
     /**
-     * É¾³ıÁ´±íµÄµ¹ÊıµÚn¸ö½Úµã
+     * åˆ é™¤é“¾è¡¨çš„å€’æ•°ç¬¬nä¸ªèŠ‚ç‚¹
      *
      * @param head
      * @param n
@@ -90,7 +90,7 @@ public class Solution {
 
 
 //    /**
-//     * Çó×î³¤µÄ»ØÎÄ×Ó´®
+//     * æ±‚æœ€é•¿çš„å›æ–‡å­ä¸²
 //     *
 //     * @param s
 //     * @return
@@ -136,7 +136,7 @@ public class Solution {
         int len = s.length();
         int begin = 0;
         boolean[][] dp = new boolean[len][len];
-        //ÉèÖÃ¶Ô½ÇÏßÎªtrue
+        //è®¾ç½®å¯¹è§’çº¿ä¸ºtrue
         for (int i = 0; i < len; i++) {
             dp[i][i] = true;
         }
@@ -163,36 +163,36 @@ public class Solution {
 
 
     /**
-     * ½«Ò»¸ö¸ø¶¨×Ö·û´® s ¸ù¾İ¸ø¶¨µÄĞĞÊı numRows £¬ÒÔ´ÓÉÏÍùÏÂ¡¢´Ó×óµ½ÓÒ½øĞĞ?Z ×ÖĞÎÅÅÁĞ¡£
+     * å°†ä¸€ä¸ªç»™å®šå­—ç¬¦ä¸² s æ ¹æ®ç»™å®šçš„è¡Œæ•° numRows ï¼Œä»¥ä»ä¸Šå¾€ä¸‹ã€ä»å·¦åˆ°å³è¿›è¡Œ?Z å­—å½¢æ’åˆ—ã€‚
      * <p>
-     * ±ÈÈçÊäÈë×Ö·û´®Îª "PAYPALISHIRING"?ĞĞÊıÎª 3 Ê±£¬ÅÅÁĞÈçÏÂ£º
+     * æ¯”å¦‚è¾“å…¥å­—ç¬¦ä¸²ä¸º "PAYPALISHIRING"?è¡Œæ•°ä¸º 3 æ—¶ï¼Œæ’åˆ—å¦‚ä¸‹ï¼š
      * <p>
      * P   A   H   N
      * A P L S I I G
      * Y   I   R
-     * Ö®ºó£¬ÄãµÄÊä³öĞèÒª´Ó×óÍùÓÒÖğĞĞ¶ÁÈ¡£¬²úÉú³öÒ»¸öĞÂµÄ×Ö·û´®£¬±ÈÈç£º"PAHNAPLSIIGYIR"¡£
+     * ä¹‹åï¼Œä½ çš„è¾“å‡ºéœ€è¦ä»å·¦å¾€å³é€è¡Œè¯»å–ï¼Œäº§ç”Ÿå‡ºä¸€ä¸ªæ–°çš„å­—ç¬¦ä¸²ï¼Œæ¯”å¦‚ï¼š"PAHNAPLSIIGYIR"ã€‚
      * <p>
-     * ÇëÄãÊµÏÖÕâ¸ö½«×Ö·û´®½øĞĞÖ¸¶¨ĞĞÊı±ä»»µÄº¯Êı£º
+     * è¯·ä½ å®ç°è¿™ä¸ªå°†å­—ç¬¦ä¸²è¿›è¡ŒæŒ‡å®šè¡Œæ•°å˜æ¢çš„å‡½æ•°ï¼š
      * <p>
      * string convert(string s, int numRows);
      * ?
      * <p>
-     * Ê¾Àı 1£º
+     * ç¤ºä¾‹ 1ï¼š
      * <p>
-     * ÊäÈë£ºs = "PAYPALISHIRING", numRows = 3
-     * Êä³ö£º"PAHNAPLSIIGYIR"
-     * Ê¾Àı 2£º
-     * ÊäÈë£ºs = "PAYPALISHIRING", numRows = 4
-     * Êä³ö£º"PINALSIGYAHRPI"
-     * ½âÊÍ£º
+     * è¾“å…¥ï¼šs = "PAYPALISHIRING", numRows = 3
+     * è¾“å‡ºï¼š"PAHNAPLSIIGYIR"
+     * ç¤ºä¾‹ 2ï¼š
+     * è¾“å…¥ï¼šs = "PAYPALISHIRING", numRows = 4
+     * è¾“å‡ºï¼š"PINALSIGYAHRPI"
+     * è§£é‡Šï¼š
      * P     I    N
      * A   L S  I G
      * Y A   H R
      * P     I
-     * Ê¾Àı 3£º
+     * ç¤ºä¾‹ 3ï¼š
      * <p>
-     * ÊäÈë£ºs = "A", numRows = 1
-     * Êä³ö£º"A"
+     * è¾“å…¥ï¼šs = "A", numRows = 1
+     * è¾“å‡ºï¼š"A"
      *
      * @param s
      * @param numRows
@@ -223,7 +223,7 @@ public class Solution {
 
 
     /**
-     * Ê¢×î¶àË®µÄÈİÆ÷
+     * ç››æœ€å¤šæ°´çš„å®¹å™¨
      *
      * @param height
      * @return
@@ -246,7 +246,7 @@ public class Solution {
 
 
     /**
-     * ¼ÆËãÒ»Î¬Êı×é×î´ó¾ØĞÎÃæ»ı
+     * è®¡ç®—ä¸€ç»´æ•°ç»„æœ€å¤§çŸ©å½¢é¢ç§¯
      *
      * @param heights
      * @return
@@ -254,7 +254,7 @@ public class Solution {
     public static int largestRectangleArea(int[] heights) {
         int len = heights.length;
         Stack<Integer> stack = new Stack<>();
-        //±£´æ×óÓÒÇø¼ä
+        //ä¿å­˜å·¦å³åŒºé—´
         int[] left = new int[len];
         int[] right = new int[len];
         Arrays.fill(right, len);
@@ -275,7 +275,7 @@ public class Solution {
 
 
     /**
-     * ¼ÆËã¶şÎ¬Êı×éµÄ×î´ó¾ØĞÎÃæ»ı
+     * è®¡ç®—äºŒç»´æ•°ç»„çš„æœ€å¤§çŸ©å½¢é¢ç§¯
      *
      * @param matrix
      * @return
@@ -307,7 +307,7 @@ public class Solution {
     }
 
     /**
-     * ÇóÍ¼µÄ×î¶ÌÂ·¾¶£¨Dijkstra£©
+     * æ±‚å›¾çš„æœ€çŸ­è·¯å¾„ï¼ˆDijkstraï¼‰
      *
      * @param times
      * @param n
@@ -317,7 +317,7 @@ public class Solution {
     public static int networkDelayTime(int[][] times, int n, int k) {
 //        System.out.print(k - 1);
         int max = Integer.MIN_VALUE;
-        //¹¹½¨¾ØÕó
+        //æ„å»ºçŸ©é˜µ
         int[] road = new int[n];
         int count = 1;
         int[][] adjMatrix = new int[n][n];
@@ -327,10 +327,10 @@ public class Solution {
         for (int[] time : times) {
             adjMatrix[time[0] - 1][time[1] - 1] = time[2];
         }
-        //SÊı×é
+        //Sæ•°ç»„
         int[] result = new int[adjMatrix.length];
         boolean[] used = new boolean[adjMatrix.length];
-        //±êÊ¶k×÷Îª¶¥µã
+        //æ ‡è¯†kä½œä¸ºé¡¶ç‚¹
         used[k - 1] = true;
         road[0] = k - 1;
         for (int i = 0; i < adjMatrix.length; i++) {
@@ -343,7 +343,7 @@ public class Solution {
             int min = Integer.MAX_VALUE;
             int cur = 0;
             for (int j = 0; j < adjMatrix.length; j++) {
-                //µÚj¸ö»¹Ã»ÓĞ±éÀúµ½
+                //ç¬¬jä¸ªè¿˜æ²¡æœ‰éå†åˆ°
                 if (!used[j] && result[j] != -1 && result[j] < min) {
                     min = result[j];
                     cur = j;
@@ -352,7 +352,7 @@ public class Solution {
 //            System.out.print("--->" + cur);
             road[count] = cur;
             count++;
-            //¸üĞÂUÊı×é
+            //æ›´æ–°Uæ•°ç»„
             used[cur] = true;
             for (int j = 0; j < adjMatrix.length; j++) {
                 if (!used[j]) {
@@ -415,7 +415,7 @@ public class Solution {
 
 
     /**
-     * ÈÓ¼¦µ° µİ¹é½â·¨dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
+     * æ‰”é¸¡è›‹ é€’å½’è§£æ³•dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
      *
      * @param k
      * @param n
@@ -446,7 +446,7 @@ public class Solution {
 
 
     /**
-     * ¶¯Ì¬¹æ»®½â·¨dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
+     * åŠ¨æ€è§„åˆ’è§£æ³•dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
      *
      * @param k
      * @param n
@@ -454,12 +454,12 @@ public class Solution {
      */
     public int superEggDrop(int k, int n) {
         int dp[][] = new int[k + 1][n + 1];
-        //Ö»ÓĞÒ»¸ö¼¦µ°µÄÊ±ºò£¬×î¶àĞèÒªn´Î;Ã»ÓĞ¼¦µ°µÄÊ±ºò£¬¶¼ÊÇ0´Î
+        //åªæœ‰ä¸€ä¸ªé¸¡è›‹çš„æ—¶å€™ï¼Œæœ€å¤šéœ€è¦næ¬¡;æ²¡æœ‰é¸¡è›‹çš„æ—¶å€™ï¼Œéƒ½æ˜¯0æ¬¡
         for (int i = 0; i <= n; i++) {
             dp[0][i] = 0;
             dp[1][i] = i;
         }
-        //Ö»ÓĞ0²ãµÄÊ±ºò£¬¶¼ÊÇ0´Î
+        //åªæœ‰0å±‚çš„æ—¶å€™ï¼Œéƒ½æ˜¯0æ¬¡
         for (int i = 0; i <= k; i++) {
             dp[i][0] = 0;
         }
@@ -476,7 +476,7 @@ public class Solution {
     }
 
     /**
-     * ì³²¨ÄÇÆõÊıÁĞÖ¸Õë½â·¨
+     * æ–æ³¢é‚£å¥‘æ•°åˆ—æŒ‡é’ˆè§£æ³•
      *
      * @param n
      * @return
@@ -495,7 +495,7 @@ public class Solution {
     }
 
     /**
-     * ì³²¨ÄÇÆõ¶¯Ì¬¹æ»®½â·¨
+     * æ–æ³¢é‚£å¥‘åŠ¨æ€è§„åˆ’è§£æ³•
      *
      * @param n
      * @return
@@ -521,7 +521,7 @@ public class Solution {
 
 
     /**
-     * À¨ºÅÉú³É£¨±©Á¦½â·¨£©
+     * æ‹¬å·ç”Ÿæˆï¼ˆæš´åŠ›è§£æ³•ï¼‰
      *
      * @param n
      * @return
@@ -562,7 +562,7 @@ public class Solution {
 
 
     /**
-     * À¨ºÅÉú³É£¨»ØËİ·¨£©
+     * æ‹¬å·ç”Ÿæˆï¼ˆå›æº¯æ³•ï¼‰
      *
      * @param n
      * @return
@@ -611,7 +611,7 @@ public class Solution {
     }
 
     /**
-     * ¶ş²æÊ÷ÏÈĞò±éÀú(µİ¹é·¨)
+     * äºŒå‰æ ‘å…ˆåºéå†(é€’å½’æ³•)
      *
      * @param root
      * @return
@@ -633,7 +633,7 @@ public class Solution {
 
 
     /**
-     * ¶ş²æÊ÷µÄÏÈĞò±éÀú£¨Êı¾İ½á¹¹·¨£©
+     * äºŒå‰æ ‘çš„å…ˆåºéå†ï¼ˆæ•°æ®ç»“æ„æ³•ï¼‰
      *
      * @param root
      * @return
@@ -657,12 +657,40 @@ public class Solution {
     }
 
     /**
-     * ¶ş²æÊ÷Õ¹¿ªÎªÁ´±í
+     * äºŒå‰æ ‘å±•å¼€ä¸ºé“¾è¡¨
      *
      * @param root
      */
     public void flatten(TreeNode root) {
 
+    }
+    
+    
+     /**
+     * è¿”å›å‰kä¸ªå‡ºç°æ¬¡æ•°æœ€å¤šçš„å…ƒç´ ï¼Œæœ€å°å †æ­å‘
+     *
+     * @param words
+     * @param k
+     * @return
+     */
+    public static List<String> topKFrequent(String[] words, int k) {
+        List<String> result = new ArrayList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+        PriorityQueue<Map.Entry<String, Integer>> priorityQueue = new PriorityQueue<>(
+                (o1, o2) -> (o1.getValue() == o2.getValue() ? o2.getKey().compareTo(o1.getKey()) : o1.getValue() - o2.getValue()));
+        map.entrySet().forEach(priorityQueue::offer);
+        while (!priorityQueue.isEmpty()) {
+            result.add(priorityQueue.poll().getKey());
+        }
+        int len = result.size()-k;
+        for (int i = 0; i < len; i++) {
+            result.remove(0);
+        }
+        Collections.reverse(result);
+        return result;
     }
 
 
