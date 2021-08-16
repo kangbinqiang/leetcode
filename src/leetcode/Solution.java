@@ -6,7 +6,7 @@ public class Solution {
 
 
     /**
-     * 获取字符串最长的公共前缀
+     * 鑾峰彇瀛楃涓叉渶闀跨殑鍏叡鍓嶇紑
      *
      * @param strs
      * @return
@@ -45,7 +45,7 @@ public class Solution {
     }
 
     /**
-     * 合并两个有序链表
+     * 鍚堝苟涓や釜鏈夊簭閾捐〃
      *
      * @param l1
      * @param l2
@@ -66,7 +66,7 @@ public class Solution {
     }
 
     /**
-     * 删除链表的倒数第n个节点
+     * 鍒犻櫎閾捐〃鐨勫�掓暟绗琻涓妭鐐�
      *
      * @param head
      * @param n
@@ -90,7 +90,7 @@ public class Solution {
 
 
 //    /**
-//     * 求最长的回文子串
+//     * 姹傛渶闀跨殑鍥炴枃瀛愪覆
 //     *
 //     * @param s
 //     * @return
@@ -136,7 +136,7 @@ public class Solution {
         int len = s.length();
         int begin = 0;
         boolean[][] dp = new boolean[len][len];
-        //设置对角线为true
+        //璁剧疆瀵硅绾夸负true
         for (int i = 0; i < len; i++) {
             dp[i][i] = true;
         }
@@ -163,36 +163,36 @@ public class Solution {
 
 
     /**
-     * 将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行?Z 字形排列。
+     * 灏嗕竴涓粰瀹氬瓧绗︿覆 s 鏍规嵁缁欏畾鐨勮鏁� numRows 锛屼互浠庝笂寰�涓嬨�佷粠宸﹀埌鍙宠繘琛�?Z 瀛楀舰鎺掑垪銆�
      * <p>
-     * 比如输入字符串为 "PAYPALISHIRING"?行数为 3 时，排列如下：
+     * 姣斿杈撳叆瀛楃涓蹭负 "PAYPALISHIRING"?琛屾暟涓� 3 鏃讹紝鎺掑垪濡備笅锛�
      * <p>
      * P   A   H   N
      * A P L S I I G
      * Y   I   R
-     * 之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如："PAHNAPLSIIGYIR"。
+     * 涔嬪悗锛屼綘鐨勮緭鍑洪渶瑕佷粠宸﹀線鍙抽�愯璇诲彇锛屼骇鐢熷嚭涓�涓柊鐨勫瓧绗︿覆锛屾瘮濡傦細"PAHNAPLSIIGYIR"銆�
      * <p>
-     * 请你实现这个将字符串进行指定行数变换的函数：
+     * 璇蜂綘瀹炵幇杩欎釜灏嗗瓧绗︿覆杩涜鎸囧畾琛屾暟鍙樻崲鐨勫嚱鏁帮細
      * <p>
      * string convert(string s, int numRows);
      * ?
      * <p>
-     * 示例 1：
+     * 绀轰緥 1锛�
      * <p>
-     * 输入：s = "PAYPALISHIRING", numRows = 3
-     * 输出："PAHNAPLSIIGYIR"
-     * 示例 2：
-     * 输入：s = "PAYPALISHIRING", numRows = 4
-     * 输出："PINALSIGYAHRPI"
-     * 解释：
+     * 杈撳叆锛歴 = "PAYPALISHIRING", numRows = 3
+     * 杈撳嚭锛�"PAHNAPLSIIGYIR"
+     * 绀轰緥 2锛�
+     * 杈撳叆锛歴 = "PAYPALISHIRING", numRows = 4
+     * 杈撳嚭锛�"PINALSIGYAHRPI"
+     * 瑙ｉ噴锛�
      * P     I    N
      * A   L S  I G
      * Y A   H R
      * P     I
-     * 示例 3：
+     * 绀轰緥 3锛�
      * <p>
-     * 输入：s = "A", numRows = 1
-     * 输出："A"
+     * 杈撳叆锛歴 = "A", numRows = 1
+     * 杈撳嚭锛�"A"
      *
      * @param s
      * @param numRows
@@ -223,7 +223,7 @@ public class Solution {
 
 
     /**
-     * 盛最多水的容器
+     * 鐩涙渶澶氭按鐨勫鍣�
      *
      * @param height
      * @return
@@ -246,7 +246,7 @@ public class Solution {
 
 
     /**
-     * 计算一维数组最大矩形面积
+     * 璁＄畻涓�缁存暟缁勬渶澶х煩褰㈤潰绉�
      *
      * @param heights
      * @return
@@ -254,7 +254,7 @@ public class Solution {
     public static int largestRectangleArea(int[] heights) {
         int len = heights.length;
         Stack<Integer> stack = new Stack<>();
-        //保存左右区间
+        //淇濆瓨宸﹀彸鍖洪棿
         int[] left = new int[len];
         int[] right = new int[len];
         Arrays.fill(right, len);
@@ -275,7 +275,7 @@ public class Solution {
 
 
     /**
-     * 计算二维数组的最大矩形面积
+     * 璁＄畻浜岀淮鏁扮粍鐨勬渶澶х煩褰㈤潰绉�
      *
      * @param matrix
      * @return
@@ -307,7 +307,7 @@ public class Solution {
     }
 
     /**
-     * 求图的最短路径（Dijkstra）
+     * 姹傚浘鐨勬渶鐭矾寰勶紙Dijkstra锛�
      *
      * @param times
      * @param n
@@ -317,7 +317,7 @@ public class Solution {
     public static int networkDelayTime(int[][] times, int n, int k) {
 //        System.out.print(k - 1);
         int max = Integer.MIN_VALUE;
-        //构建矩阵
+        //鏋勫缓鐭╅樀
         int[] road = new int[n];
         int count = 1;
         int[][] adjMatrix = new int[n][n];
@@ -327,10 +327,10 @@ public class Solution {
         for (int[] time : times) {
             adjMatrix[time[0] - 1][time[1] - 1] = time[2];
         }
-        //S数组
+        //S鏁扮粍
         int[] result = new int[adjMatrix.length];
         boolean[] used = new boolean[adjMatrix.length];
-        //标识k作为顶点
+        //鏍囪瘑k浣滀负椤剁偣
         used[k - 1] = true;
         road[0] = k - 1;
         for (int i = 0; i < adjMatrix.length; i++) {
@@ -343,7 +343,7 @@ public class Solution {
             int min = Integer.MAX_VALUE;
             int cur = 0;
             for (int j = 0; j < adjMatrix.length; j++) {
-                //第j个还没有遍历到
+                //绗琷涓繕娌℃湁閬嶅巻鍒�
                 if (!used[j] && result[j] != -1 && result[j] < min) {
                     min = result[j];
                     cur = j;
@@ -352,7 +352,7 @@ public class Solution {
 //            System.out.print("--->" + cur);
             road[count] = cur;
             count++;
-            //更新U数组
+            //鏇存柊U鏁扮粍
             used[cur] = true;
             for (int j = 0; j < adjMatrix.length; j++) {
                 if (!used[j]) {
@@ -415,7 +415,7 @@ public class Solution {
 
 
     /**
-     * 扔鸡蛋 递归解法dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
+     * 鎵旈浮铔� 閫掑綊瑙ｆ硶dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
      *
      * @param k
      * @param n
@@ -446,7 +446,7 @@ public class Solution {
 
 
     /**
-     * 动态规划解法dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
+     * 鍔ㄦ�佽鍒掕В娉昫p[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
      *
      * @param k
      * @param n
@@ -454,12 +454,12 @@ public class Solution {
      */
     public int superEggDrop(int k, int n) {
         int dp[][] = new int[k + 1][n + 1];
-        //只有一个鸡蛋的时候，最多需要n次;没有鸡蛋的时候，都是0次
+        //鍙湁涓�涓浮铔嬬殑鏃跺�欙紝鏈�澶氶渶瑕乶娆�;娌℃湁楦¤泲鐨勬椂鍊欙紝閮芥槸0娆�
         for (int i = 0; i <= n; i++) {
             dp[0][i] = 0;
             dp[1][i] = i;
         }
-        //只有0层的时候，都是0次
+        //鍙湁0灞傜殑鏃跺�欙紝閮芥槸0娆�
         for (int i = 0; i <= k; i++) {
             dp[i][0] = 0;
         }
@@ -476,7 +476,7 @@ public class Solution {
     }
 
     /**
-     * 斐波那契数列指针解法
+     * 鏂愭尝閭ｅ鏁板垪鎸囬拡瑙ｆ硶
      *
      * @param n
      * @return
@@ -495,7 +495,7 @@ public class Solution {
     }
 
     /**
-     * 斐波那契动态规划解法
+     * 鏂愭尝閭ｅ鍔ㄦ�佽鍒掕В娉�
      *
      * @param n
      * @return
@@ -521,7 +521,7 @@ public class Solution {
 
 
     /**
-     * 括号生成（暴力解法）
+     * 鎷彿鐢熸垚锛堟毚鍔涜В娉曪級
      *
      * @param n
      * @return
@@ -562,7 +562,7 @@ public class Solution {
 
 
     /**
-     * 括号生成（回溯法）
+     * 鎷彿鐢熸垚锛堝洖婧硶锛�
      *
      * @param n
      * @return
@@ -611,7 +611,7 @@ public class Solution {
     }
 
     /**
-     * 二叉树先序遍历(递归法)
+     * 浜屽弶鏍戝厛搴忛亶鍘�(閫掑綊娉�)
      *
      * @param root
      * @return
@@ -633,7 +633,7 @@ public class Solution {
 
 
     /**
-     * 二叉树的先序遍历（数据结构法）
+     * 浜屽弶鏍戠殑鍏堝簭閬嶅巻锛堟暟鎹粨鏋勬硶锛�
      *
      * @param root
      * @return
@@ -657,17 +657,17 @@ public class Solution {
     }
 
     /**
-     * 二叉树展开为链表
+     * 浜屽弶鏍戝睍寮�涓洪摼琛�
      *
      * @param root
      */
     public void flatten(TreeNode root) {
 
     }
-    
-    
-     /**
-     * 返回前k个出现次数最多的元素，最小堆揭发
+
+
+    /**
+     * 杩斿洖鍓峩涓嚭鐜版鏁版渶澶氱殑鍏冪礌锛屾渶灏忓爢鎻彂
      *
      * @param words
      * @param k
@@ -697,12 +697,12 @@ public class Solution {
     public static HashMap<Integer, Integer> treeMap = new HashMap<>();
 
     /**
-     * ������������ǰ����������������������ɶ�����
+     * 给定二叉树的前序遍历和中序遍历结果，生成二叉树
      * Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
      * Output: [3,9,20,null,null,15,7]
-     * 1�����ȶ�������ǰ���������У���һ���ڵ���Ǹ��ڵ�
-     * 2���ڶ������������������ҳ����ڵ����ڵ��±꣬����ߵ�Ϊ���������ұߵ�Ϊ������
-     * 3��ÿһ������������������ǰ�����ҳ����ڵ㣬����ѭ��1��2��3������ɶ������Ĵ���
+     * 1、首先二叉树的前序遍历结果中，第一个节点就是根节点
+     * 2、在二叉树中序遍历结果中找出根节点所在的下标，则左边的为左子树，右边的为右子树
+     * 3、每一个左子树序列又能在前序中找出根节点，依次循环1、2、3即可完成二叉树的创建
      *
      * @param preorder
      * @param inorder
@@ -711,7 +711,7 @@ public class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         int len = preorder.length;
 
-        //��������������һ���ֵ���
+        //将中序结果保存在一个字典中
         for (int i = 0; i < inorder.length; i++) {
             treeMap.put(inorder[i], i);
         }
@@ -723,23 +723,23 @@ public class Solution {
         if (pre_left > pre_right) {
             return null;
         }
-        //ǰ�����������ڵ����ڵ�λ��Ϊ��һ�������룺���绻�ɺ�������������һ��Ϊ���ڵ�
+        //前序遍历结果根节点所在的位置为第一个，试想：假如换成后序遍历，则最后一个为根节点
         int pre_root = 0;
-        //�����������и��ڵ����ڵ�λ��
+        //中序遍历结果中根节点所在的位置
         int in_root = treeMap.get(preorder[pre_root]);
-        //�������ĳ���
+        //左子树的长度
         int left_size = in_root - in_left;
         TreeNode root = new TreeNode(preorder[pre_root]);
-        //�ҳ�ǰ��������������е�������
+        //找出前序和中序遍历结果中的左子树
         root.left = build(preorder, pre_left + 1, pre_left + left_size, inorder, in_right, left_size - 1);
-        //�ҳ�ǰ��������������е�������
+        //找出前序和中序遍历结果中的右子树
         root.right = build(preorder, pre_left + left_size + 1, pre_right, inorder, left_size + 1, in_right);
         return root;
     }
 
 
     /**
-     * �������� �ǿ� ����������ʾ�����Ǹ�������������ÿλ���ֶ��ǰ��� ���� �ķ�ʽ�洢�ģ�����ÿ���ڵ�ֻ�ܴ洢 һλ ���֡�
+     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
      * @param l1
      * @param l2
      * @return
@@ -772,6 +772,10 @@ public class Solution {
     }
 
 
+
+
+
+
     public static void main(String[] args) {
 //        int[][] times = new int[][]{{2, 1, 1}, {2, 3, 1}, {3, 4, 1}};
 //        int n = 4;
@@ -780,7 +784,7 @@ public class Solution {
 //        System.out.println("hello world");
 //        System.out.println(convert("PAYPALISHIRING", 4));
 //        char[][] arr = new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}};
-//        System.out.println(maximalRectangle(arr));
+//        System.out.println(maximalRectangle(arr));7
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println(fib(i));
 //        }
