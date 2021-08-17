@@ -1,5 +1,7 @@
 package leetcode;
 
+import sun.awt.windows.WPrinterJob;
+
 import java.util.*;
 
 public class Solution {
@@ -685,7 +687,7 @@ public class Solution {
         while (!priorityQueue.isEmpty()) {
             result.add(priorityQueue.poll().getKey());
         }
-        int len = result.size()-k;
+        int len = result.size() - k;
         for (int i = 0; i < len; i++) {
             result.remove(0);
         }
@@ -740,6 +742,7 @@ public class Solution {
 
     /**
      * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     *
      * @param l1
      * @param l2
      * @return
@@ -772,11 +775,47 @@ public class Solution {
     }
 
 
+    /**
+     * 寻找最长重复子串
+     * 1、递归找出所有的子串
+     * 2、KMP算法
+     *
+     * @param s
+     * @return
+     */
+    public static String longestDupSubstring(String s) {
+        int max = Integer.MIN_VALUE;
+        String result = "";
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i + 1; j <= s.length(); j++) {
+                String p = s.substring(i, j);
+                System.out.println(p);
+                //此时以子串将源串分为左右两个，假如任何一个中存在子串，则返回结果
+                if (searchChild(i, j, s, p)) {
+                    if ((j - i) > max) {
+                        max = j - i;
+                        result = s.substring(i, j);
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
-
+    private static boolean searchChild(int i, int j, String s, String p) {
+        System.out.println(i + "-" + j + "\t" + s + "\t" + p);
+        String left = s.substring(0, i);
+        System.out.println("left:" + left);
+        String right = s.substring(j);
+        System.out.println("right:" + right);
+        System.out.println("===============================================");
+        return (left.indexOf(p) != -1 || right.indexOf(p) != -1);
+    }
 
 
     public static void main(String[] args) {
+        System.out.println(longestDupSubstring("banana"));
+        ;
 //        int[][] times = new int[][]{{2, 1, 1}, {2, 3, 1}, {3, 4, 1}};
 //        int n = 4;
 //        int k = 2;
@@ -788,7 +827,7 @@ public class Solution {
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println(fib(i));
 //        }
-        System.out.println(generateParenthesis(3));
+//        System.out.println(generateParenthesis(3));
     }
 
 }
