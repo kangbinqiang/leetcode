@@ -1,7 +1,5 @@
 package leetcode;
 
-import sun.awt.windows.WPrinterJob;
-
 import java.util.*;
 
 public class Solution {
@@ -659,17 +657,31 @@ public class Solution {
     }
 
     /**
-     * 浜屽弶鏍戝睍寮�涓洪摼琛�
+     * 二叉树展开为链表
      *
      * @param root
      */
     public void flatten(TreeNode root) {
+        //前序展开既是
+        List<TreeNode> res = new ArrayList<>();
+        preOrderTravels(root, res);
+        TreeNode head = new TreeNode(0);
+        for (TreeNode re : res) {
+            re.left = null;
+            head.right = re;
+            head = head.left;
+        }
+    }
 
+    private void preOrderTravels(TreeNode root, List<TreeNode> res) {
+        res.add(root);
+        preOrderTravels(root.left, res);
+        preOrderTravels(root.right, res);
     }
 
 
     /**
-     * 杩斿洖鍓峩涓嚭鐜版鏁版渶澶氱殑鍏冪礌锛屾渶灏忓爢鎻彂
+     * 前k个单词
      *
      * @param words
      * @param k
@@ -813,8 +825,43 @@ public class Solution {
     }
 
 
+    /**
+     * 第30题：串联所有的单词
+     *
+     * @param s
+     * @param words
+     * @return
+     */
+    public static List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> result = new ArrayList<>();
+        if (s == null || s.length() == 0 || words == null || words.length == 0) {
+            return result;
+        }
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+        int wordLength = words[0].length();
+        int allWordLength = words.length * wordLength;
+        for (int i = 0; i < s.length() - allWordLength + 1; i++) {
+            String curStr = s.substring(i, i + allWordLength);
+            HashMap<String, Integer> curMap = new HashMap<>();
+            for (int j = 0; j < curStr.length(); j += wordLength) {
+                String childWord = curStr.substring(j, j + wordLength);
+                curMap.put(childWord, curMap.getOrDefault(childWord, 0) + 1);
+            }
+            if (map.equals(curMap)) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(longestDupSubstring("banana"));
+
+        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
+//        System.out.println(longestDupSubstring("banana"));
         ;
 //        int[][] times = new int[][]{{2, 1, 1}, {2, 3, 1}, {3, 4, 1}};
 //        int n = 4;
