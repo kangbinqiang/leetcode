@@ -858,9 +858,32 @@ public class Solution {
     }
 
 
-    public static void main(String[] args) {
+    /**
+     * 第45题：跳跃游戏
+     *
+     * @param nums
+     * @return
+     */
+    public static int jump(int[] nums) {
+        int position = nums.length - 1;
+        int step = 0;
+        while (position > 0) {
+            for (int i = 0; i < position; i++) {
+                if (i + nums[i] >= position) {
+                    position = i;
+                    step++;
+                    break;
+                }
+            }
+        }
+        return step;
+    }
 
-        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
+
+    public static void main(String[] args) {
+        System.out.println(jump(new int[]{2,3,1,1,4}));
+
+//        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
 //        System.out.println(longestDupSubstring("banana"));
         ;
 //        int[][] times = new int[][]{{2, 1, 1}, {2, 3, 1}, {3, 4, 1}};
