@@ -878,7 +878,51 @@ public class Solution {
         }
         return step;
     }
+    
+    
+    /**
+     * 最小覆盖字串
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public static String minWindow(String s, String t) {
+        HashMap<Character, Integer> tMap = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            tMap.put(t.charAt(i), tMap.getOrDefault(t.charAt(i), 0) + 1);
+        }
+        int left = 0, right = 0;
+        HashMap<Character, Integer> sMap = new HashMap<>();
+        int min = Integer.MAX_VALUE;
+        int index = 0;
+        boolean flag = true;
+        while (right < s.length() && left <= right) {
+            if (checkMap(sMap, tMap)) {
+                //左收缩
+                sMap.put(s.charAt(left), sMap.getOrDefault(s.charAt(left), 0) - 1);
+                left++;
+                //记录位置
+                if ((right - left + 1) <= min) {
+                    min = right - left + 1;
+                    index = left;
+                }
+                continue;
+            } else {
 
+            }
+        }
+        return s.substring(index - 1, index + min - 1);
+    }
+
+    private static boolean checkMap(HashMap<Character, Integer> sMap, HashMap<Character, Integer> tMap) {
+        for (Map.Entry<Character, Integer> entry : tMap.entrySet()) {
+            if (!sMap.containsKey(entry.getKey()) || sMap.get(entry.getKey()) < entry.getValue()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static void main(String[] args) {
         System.out.println(jump(new int[]{2,3,1,1,4}));
