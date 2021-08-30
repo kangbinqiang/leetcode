@@ -6,7 +6,7 @@ public class Solution {
 
 
     /**
-     * 鑾峰彇瀛楃涓叉渶闀跨殑鍏叡鍓嶇紑
+     * 最长公共前缀
      *
      * @param strs
      * @return
@@ -33,6 +33,32 @@ public class Solution {
         }
         return str1.substring(0, index);
     }
+    
+    /**
+     * 最长公共前缀
+     *
+     * @param strs
+     * @return
+     */
+    public static String longestCommonPrefix1(String[] strs) {
+        if (strs.length == 0) {
+            return "";
+        }
+        String ans = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            int j = 0;
+            for (; j < ans.length() && j < strs[i].length(); j++) {
+                if (ans.charAt(j) != strs[i].charAt(j)) {
+                    break;
+                }
+            }
+            ans = strs[i].substring(0, j);
+            if ("".equals(ans)) {
+                return ans;
+            }
+        }
+        return ans;
+    }
 
 
     class ListNode {
@@ -45,7 +71,7 @@ public class Solution {
     }
 
     /**
-     * 鍚堝苟涓や釜鏈夊簭閾捐〃
+     * 合并两个有序链表
      *
      * @param l1
      * @param l2
@@ -66,7 +92,7 @@ public class Solution {
     }
 
     /**
-     * 鍒犻櫎閾捐〃鐨勫�掓暟绗琻涓妭鐐�
+     * 删除倒数第k个节点
      *
      * @param head
      * @param n
@@ -89,42 +115,12 @@ public class Solution {
     }
 
 
-//    /**
-//     * 姹傛渶闀跨殑鍥炴枃瀛愪覆
-//     *
-//     * @param s
-//     * @return
-//     */
-//    public String longestPalindrome(String s) {
-//        if (s == null || "".equals(s)) {
-//            return null;
-//        }
-//        int max = 0;
-//        int left = 0;
-//        for (int i = 0; i < s.length(); i++) {
-//            for (int j = 0; j < s.length(); j++) {
-//                if (j - i + 1 > max && isPalindrome(s, i, j)) {
-//                    max = j - i + 1;
-//                    left = i;
-//                }
-//            }
-//        }
-//        return s.substring(left, left + max);
-//    }
-//
-//    private boolean isPalindrome(String s, int i, int j) {
-//        char[] chars = s.toCharArray();
-//        while (i < j) {
-//            if (chars[i] != chars[j]) {
-//                return false;
-//            }
-//            i++;
-//            j--;
-//        }
-//        return true;
-//    }
 
 
+    /**
+     *
+     *最长的回文字串
+     */
     public String longestPalindrome(String s) {
         if (s == null || "".equals(s)) {
             return null;
@@ -136,7 +132,6 @@ public class Solution {
         int len = s.length();
         int begin = 0;
         boolean[][] dp = new boolean[len][len];
-        //璁剧疆瀵硅绾夸负true
         for (int i = 0; i < len; i++) {
             dp[i][i] = true;
         }
@@ -163,40 +158,8 @@ public class Solution {
 
 
     /**
-     * 灏嗕竴涓粰瀹氬瓧绗︿覆 s 鏍规嵁缁欏畾鐨勮鏁� numRows 锛屼互浠庝笂寰�涓嬨�佷粠宸﹀埌鍙宠繘琛�?Z 瀛楀舰鎺掑垪銆�
-     * <p>
-     * 姣斿杈撳叆瀛楃涓蹭负 "PAYPALISHIRING"?琛屾暟涓� 3 鏃讹紝鎺掑垪濡備笅锛�
-     * <p>
-     * P   A   H   N
-     * A P L S I I G
-     * Y   I   R
-     * 涔嬪悗锛屼綘鐨勮緭鍑洪渶瑕佷粠宸﹀線鍙抽�愯璇诲彇锛屼骇鐢熷嚭涓�涓柊鐨勫瓧绗︿覆锛屾瘮濡傦細"PAHNAPLSIIGYIR"銆�
-     * <p>
-     * 璇蜂綘瀹炵幇杩欎釜灏嗗瓧绗︿覆杩涜鎸囧畾琛屾暟鍙樻崲鐨勫嚱鏁帮細
-     * <p>
-     * string convert(string s, int numRows);
-     * ?
-     * <p>
-     * 绀轰緥 1锛�
-     * <p>
-     * 杈撳叆锛歴 = "PAYPALISHIRING", numRows = 3
-     * 杈撳嚭锛�"PAHNAPLSIIGYIR"
-     * 绀轰緥 2锛�
-     * 杈撳叆锛歴 = "PAYPALISHIRING", numRows = 4
-     * 杈撳嚭锛�"PINALSIGYAHRPI"
-     * 瑙ｉ噴锛�
-     * P     I    N
-     * A   L S  I G
-     * Y A   H R
-     * P     I
-     * 绀轰緥 3锛�
-     * <p>
-     * 杈撳叆锛歴 = "A", numRows = 1
-     * 杈撳嚭锛�"A"
      *
-     * @param s
-     * @param numRows
-     * @return
+     *Z字形变换
      */
     public static String convert(String s, int numRows) {
         if (numRows == 1) {
@@ -223,7 +186,7 @@ public class Solution {
 
 
     /**
-     * 鐩涙渶澶氭按鐨勫鍣�
+     * 最多盛水容器
      *
      * @param height
      * @return
@@ -246,7 +209,7 @@ public class Solution {
 
 
     /**
-     * 璁＄畻涓�缁存暟缁勬渶澶х煩褰㈤潰绉�
+     * 柱状图中最大矩形
      *
      * @param heights
      * @return
@@ -275,7 +238,7 @@ public class Solution {
 
 
     /**
-     * 璁＄畻浜岀淮鏁扮粍鐨勬渶澶х煩褰㈤潰绉�
+     *最大矩形
      *
      * @param matrix
      * @return
@@ -307,7 +270,7 @@ public class Solution {
     }
 
     /**
-     * 姹傚浘鐨勬渶鐭矾寰勶紙Dijkstra锛�
+     * 网络延迟时间Dijkstra
      *
      * @param times
      * @param n
