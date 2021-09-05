@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.*;
+import java.util.concurrent.DelayQueue;
 
 public class Solution {
 
@@ -33,7 +34,7 @@ public class Solution {
         }
         return str1.substring(0, index);
     }
-    
+
     /**
      * 最长公共前缀
      *
@@ -115,11 +116,8 @@ public class Solution {
     }
 
 
-
-
     /**
-     *
-     *最长的回文字串
+     * 最长的回文字串
      */
     public String longestPalindrome(String s) {
         if (s == null || "".equals(s)) {
@@ -158,8 +156,7 @@ public class Solution {
 
 
     /**
-     *
-     *Z字形变换
+     * Z字形变换
      */
     public static String convert(String s, int numRows) {
         if (numRows == 1) {
@@ -238,7 +235,7 @@ public class Solution {
 
 
     /**
-     *最大矩形
+     * 最大矩形
      *
      * @param matrix
      * @return
@@ -841,8 +838,8 @@ public class Solution {
         }
         return step;
     }
-    
-    
+
+
     /**
      * 第76题：最小覆盖字串
      *
@@ -875,9 +872,73 @@ public class Solution {
         return ans;
     }
 
-    public static void main(String[] args) {
-        System.out.println(jump(new int[]{2,3,1,1,4}));
+    public static int jump1(int[] nums) {
+        int length = nums.length - 1;
+        int maxStep = 0;
+        int end = 0;
+        int step = 0;
+        for (int i = 0; i < length - 1; i++) {
+            maxStep = Math.max(maxStep, nums[i] + i);
+            if (i == end) {
+                end = maxStep;
+                step++;
+            }
+        }
+        return step;
+    }
 
+
+    /**
+     * 第4题：寻找两个正序数组的中位数
+     *
+     * @param A
+     * @param B
+     * @return
+     */
+    public static double findMedianSortedArrays(int[] A, int[] B) {
+        int m = A.length;
+        int n = B.length;
+        int len = m + n;
+        int left = -1, right = -1;
+        int aStart = 0, bStart = 0;
+        for (int i = 0; i <= len / 2; i++) {
+            left = right;
+            if (aStart < m && (bStart >= n || A[aStart] < B[bStart])) {
+                right = A[aStart++];
+            } else {
+                right = B[bStart++];
+            }
+        }
+        if ((len & 1) == 0)
+            return (left + right) / 2.0;
+        else
+            return right;
+    }
+
+
+    /**
+     * 第7题：整数反转
+     *
+     * @param x
+     * @return
+     */
+    public static int reverse(int x) {
+        int ans = 0;
+        while (x != 0) {
+            if (ans < Integer.MIN_VALUE / 10 || ans > Integer.MAX_VALUE / 10) {
+                return 0;
+            }
+            ans = ans * 10 + x % 10;
+            x = x / 10;
+        }
+        return ans;
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(reverse(569));
+//        System.out.println(jump(new int[]{2, 3, 1, 1, 4}));
+//        System.out.println(findMedianSortedArrays(new int[]{}, new int[]{2, 5}));
 //        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
 //        System.out.println(longestDupSubstring("banana"));
         ;
