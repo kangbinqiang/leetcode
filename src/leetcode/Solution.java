@@ -935,8 +935,114 @@ public class Solution {
     }
 
 
+    /**
+     * 第9题：回文数
+     *
+     * @param x
+     * @return
+     */
+    public static boolean isPalindrome(int x) {
+        String orign = x + "";
+        String reverse = new StringBuffer(orign).reverse().toString();
+        return orign.equals(reverse);
+    }
+
+
+    /**
+     * 第43题：字符串相乘
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public static String multiply(String num1, String num2) {
+        if ("0".equals(num1) || "0".equals(num2)) {
+            return "0";
+        }
+        int M = num1.length();
+        int N = num2.length();
+        int[] arr1 = new int[M];
+        int[] arr2 = new int[N];
+        int[] res = new int[M + N];
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            arr1[M - 1 - i] = num1.charAt(i) - '0';
+        }
+        for (int i = num2.length() - 1; i >= 0; i--) {
+            arr2[N - 1 - i] = num2.charAt(i) - '0';
+        }
+        for (int i = 0; i < arr1.length; i++) {
+            for (int j = 0; j < arr2.length; j++) {
+                res[i + j] += arr1[i] * arr2[j];
+            }
+        }
+        int flag = 0;
+        for (int i = 0; i < res.length; i++) {
+            flag += res[i];
+            res[i] = flag % 10;
+            flag /= 10;
+        }
+        int k = res.length - 1;
+        while (k >= 0 && res[k] == 0) {
+            k--;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i <= k; i++) {
+            sb.append(res[i] + "");
+        }
+        return sb.reverse().toString();
+    }
+
+
+    /**
+     * 第10题：正则表达式匹配
+     *
+     * @param s
+     * @param p
+     * @return
+     */
+    public static boolean isMatch(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        int m = s.length();
+        int n = p.length();
+        //dp[i][j] 表示 s 的前 i 个是否能被 p 的前 j 个匹配
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+        for (int i = 0; i < n; i++) {
+            if (p.charAt(i) == '*' && dp[0][i - 1]) {
+                dp[0][i + 1] = true;
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (s.charAt(i) == p.charAt(j) || p.charAt(j) == '.') {
+                    //如果是任意元素 或者是对于元素匹配
+                    dp[i + 1][j + 1] = dp[i][j];
+                }
+                if (p.charAt(j) == '*') {
+                    if (p.charAt(j - 1) != s.charAt(i) && p.charAt(j - 1) != '.') {
+                        //如果前一个元素不匹配 且不为任意元素
+                        dp[i + 1][j + 1] = dp[i + 1][j - 1];
+                    } else {
+                            /*
+                            dp[i][j] = dp[i-1][j] // 多个字符匹配的情况
+                            or dp[i][j] = dp[i][j-1] // 单个字符匹配的情况
+                            or dp[i][j] = dp[i][j-2] // 没有匹配的情况
+                             */
+                        dp[i + 1][j + 1] = (dp[i][j + 1] || dp[i + 1][j] || dp[i + 1][j - 1]);
+                    }
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(reverse(569));
+        System.out.println(isMatch("a", "a*"));
+//        System.out.println(isPalindrome(121));
+//        System.out.println(reverse(569));
 //        System.out.println(jump(new int[]{2, 3, 1, 1, 4}));
 //        System.out.println(findMedianSortedArrays(new int[]{}, new int[]{2, 5}));
 //        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
