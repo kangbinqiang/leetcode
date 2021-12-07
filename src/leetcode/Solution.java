@@ -1,39 +1,12 @@
-package leetcode;
+package test;
+
+
+import com.sun.scenario.effect.impl.state.AccessHelper;
 
 import java.util.*;
-import java.util.concurrent.DelayQueue;
+import java.util.stream.Collectors;
 
-public class Solution {
-
-
-    /**
-     * 最长公共前缀
-     *
-     * @param strs
-     * @return
-     */
-    public String longestCommonPrefix(String[] strs) {
-        if (strs == null || strs.length == 0) {
-            return "";
-        }
-        String prefix = strs[0];
-        for (int i = 1; i < strs.length; i++) {
-            prefix = longestCommonPrefix(prefix, strs[i]);
-            if (prefix.length() == 0) {
-                break;
-            }
-        }
-        return prefix;
-    }
-
-    private String longestCommonPrefix(String str1, String str2) {
-        int length = Math.min(str1.length(), str2.length());
-        int index = 0;
-        while (index < length && str1.charAt(index) == str2.charAt(index)) {
-            index++;
-        }
-        return str1.substring(0, index);
-    }
+class Solution {
 
     /**
      * 最长公共前缀
@@ -41,7 +14,7 @@ public class Solution {
      * @param strs
      * @return
      */
-    public static String longestCommonPrefix1(String[] strs) {
+    public static String longestCommonPrefix(String[] strs) {
         if (strs.length == 0) {
             return "";
         }
@@ -62,12 +35,110 @@ public class Solution {
     }
 
 
-    class ListNode {
+    /**
+     * 如果出现下述两种情况，交易 可能无效：
+     * <p>
+     * 交易金额超过 ¥1000
+     * 或者，它和另一个城市中同名的另一笔交易相隔不超过 60 分钟（包含 60 分钟整）
+     * 每个交易字符串transactions[i]由一些用逗号分隔的值组成，这些值分别表示交易的名称，时间（以分钟计），金额以及城市。
+     * <p>
+     * 给你一份交易清单transactions，返回可能无效的交易列表。你可以按任何顺序返回答案。
+     * 示例 1：
+     * <p>
+     * 输入：transactions = ["alice,20,800,mtv","alice,50,100,beijing"]
+     * 输出：["alice,20,800,mtv","alice,50,100,beijing"]
+     * 解释：第一笔交易是无效的，因为第二笔交易和它间隔不超过 60 分钟、名称相同且发生在不同的城市。同样，第二笔交易也是无效的。
+     * 示例 2：
+     * <p>
+     * 输入：transactions = ["alice,20,800,mtv","alice,50,1200,mtv"]
+     * 输出：["alice,50,1200,mtv"]
+     * 示例 3：
+     * <p>
+     * 输入：transactions = ["alice,20,800,mtv","bob,50,1200,mtv"]
+     * 输出：["bob,50,1200,mtv"]
+     *
+     * @param transactions
+     * @return
+     */
+    public static List<String> invalidTransactions(String[] transactions) {
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < transactions.length; i++) {
+            String transactName = transactions[i].split(",")[0];
+            List<String> transactionList;
+            if (hashMap.get(transactName) == null) {
+                transactionList = new ArrayList<>();
+            } else {
+                transactionList = hashMap.get(transactName);
+            }
+            transactionList.add(transactions[i]);
+            hashMap.put(transactName, transactionList);
+        }
+        for (Map.Entry<String, List<String>> transaction : hashMap.entrySet()) {
+            result.addAll(compareTransaction(transaction.getValue()));
+        }
+        return result;
+    }
+
+    private static List<String> compareTransaction(List<String> transactions) {
+        List<String> set = new ArrayList<>();
+        for (int i = 0; i < transactions.size(); i++) {
+            if (Integer.valueOf(transactions.get(i).split(",")[2]) > 1000) {
+                set.add(transactions.get(i));
+                continue;
+            }
+            for (int j = 0; j < transactions.size(); j++) {
+                int curTime = Integer.valueOf(transactions.get(i).split(",")[1]);
+                int compareTime = Integer.valueOf(transactions.get(j).split(",")[1]);
+                String curCity = String.valueOf(transactions.get(i).split(",")[3]);
+                String compareCity = String.valueOf(transactions.get(j).split(",")[3]);
+                if (Math.abs(curTime - compareTime) <= 60 && !curCity.equals(compareCity)) {
+                    set.add(transactions.get(i));
+                    break;
+                }
+            }
+        }
+        return set;
+    }
+
+
+    /**
+     * 求最长无重复子串
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        HashMap<Character, Integer> hashMap = new HashMap<>();
+        int max = 0, left = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (hashMap.containsKey(s.charAt(i))) {
+                left = Math.max(left, hashMap.get(s.charAt(i)) + 1);
+            }
+            hashMap.put(s.charAt(i), i);
+            max = Math.max(max, i - left + 1);
+        }
+        return max;
+    }
+
+
+    public class ListNode {
         int val;
         ListNode next;
 
-        public ListNode(int val) {
+        ListNode() {
+        }
+
+        ListNode(int val) {
             this.val = val;
+        }
+
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
         }
     }
 
@@ -81,9 +152,11 @@ public class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
-        } else if (l2 == null) {
+        }
+        if (l2 == null) {
             return l1;
-        } else if (l1.val <= l2.val) {
+        }
+        if (l1.val < l2.val) {
             l1.next = mergeTwoLists(l1.next, l2);
             return l1;
         } else {
@@ -92,32 +165,276 @@ public class Solution {
         }
     }
 
+
     /**
-     * 删除倒数第k个节点
+     * 分治法合并n个升序链表
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        int left = 0, right = lists.length - 1;
+        return merge(lists, left, right);
+    }
+
+    private ListNode merge(ListNode[] lists, int left, int right) {
+        if (left == right) {
+            return lists[left];
+        }
+        if (left > right) {
+            return null;
+        }
+        int middle = (left + right) / 2;
+        return mergeTwoLists(merge(lists, left, middle), merge(lists, middle + 1, right));
+    }
+
+
+    class ListNodeComparator implements Comparable<ListNodeComparator> {
+
+        int val;
+        ListNode node;
+
+        ListNodeComparator(int val, ListNode node) {
+            this.val = val;
+            this.node = node;
+        }
+
+
+        @Override
+        public int compareTo(ListNodeComparator o) {
+            return this.val - o.val;
+        }
+    }
+
+    PriorityQueue<ListNodeComparator> queue = new PriorityQueue<>();
+
+    /**
+     * 使用优先级队列实现多个链表合并
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKListsWithPriorityQueue(ListNode[] lists) {
+        for (ListNode listNode : lists) {
+            if (listNode != null) {
+                queue.offer(new ListNodeComparator(listNode.val, listNode));
+            }
+        }
+        ListNode head = new ListNode(0);
+        ListNode tail = head;
+        while (!queue.isEmpty()) {
+            ListNodeComparator curNode = queue.poll();
+            tail.next = curNode.node;
+            tail = tail.next;
+            if (curNode.node.next != null) {
+                queue.offer(new ListNodeComparator(curNode.node.next.val, curNode.node.next));
+            }
+        }
+        return head.next;
+    }
+
+
+    List<Integer> path = new ArrayList<>();
+    List<List<Integer>> res = new ArrayList<>();
+
+    /**
+     * 求一个整数数组的子集(二进制法)
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        int len = nums.length;
+        for (int mask = 0; mask < (1 << len); mask++) {
+            path.clear();
+            for (int i = 0; i < len; i++) {
+                if ((mask & (1 << i)) != 0) {
+                    path.add(nums[i]);
+                }
+            }
+            res.add(new ArrayList<>(path));
+        }
+        return res;
+    }
+
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+
+    /**
+     * 判断一棵树是不是镜像对称二叉树
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return check(root, root);
+    }
+
+    private boolean check(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        return p.val == q.val && check(p.left, q.right) && check(p.right, q.left);
+    }
+
+
+    /**
+     * 删除倒数第n个链表节点
      *
      * @param head
      * @param n
      * @return
      */
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode pre = new ListNode(0);
-        pre.next = head;
-        ListNode start = pre, end = pre;
-        while (n != 0) {
-            start = start.next;
-            n--;
+        int index = 0;
+        //哨兵节点
+        ListNode res = new ListNode(0, head);
+        ListNode fast = head;
+        ListNode slow = res;
+        while (index < n) {
+            fast = fast.next;
+            index++;
         }
-        while (start.next != null) {
-            start = start.next;
-            end = end.next;
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
         }
-        end.next = end.next.next;
-        return pre.next;
+        slow.next = slow.next.next;
+        return res.next;
     }
 
 
     /**
-     * 最长的回文字串
+     * 接雨水-栈求解
+     *
+     * @param height
+     * @return
+     */
+    public static int trap(int[] height) {
+        int res = 0;
+        int len = height.length;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < len; i++) {
+            while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+                int top = stack.pop();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int max_width = i - stack.peek() - 1;
+                int max_height = Math.min(height[i], height[stack.peek()]) - height[top];
+                res += max_height * max_width;
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+
+    /**
+     * 接雨水-用双指针
+     *
+     * @param height
+     * @return
+     */
+    public static int trap1(int[] height) {
+        int left = 0, right = height.length - 1;
+        int max_left = 0, max_right = 0;
+        int res = 0;
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= max_left) {
+                    max_left = height[left];
+                } else {
+                    res += (max_left - height[left]);
+                }
+                ++left;
+            } else {
+                if (height[right] >= max_right) {
+                    max_right = height[right];
+                } else {
+                    res += (max_right - height[right]);
+                }
+                --right;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 删除有序数组中的重复项
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int p = 0;
+        int q = 1;
+        while (q < nums.length) {
+            if (nums[p] != nums[q]) {
+                if (q - p > 1) {
+                    nums[p + 1] = nums[q];
+                }
+                p++;
+            }
+            q++;
+        }
+        return p + 1;
+    }
+
+    public static List<Integer> result = new ArrayList<>();
+
+    /**
+     * 分解成最小质因数的乘积
+     *
+     * @param n
+     * @return
+     */
+    public static List primser(int n) {
+        for (int i = 2; i <= n; i++) {
+            if (n % i == 0) {
+                result.add(i);
+                primser(n / i);
+                break;
+            }
+            if (i == n) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 最长回文字串（动态规划）需要先列出状态转移方程
+     *
+     * @param s
+     * @return
      */
     public String longestPalindrome(String s) {
         if (s == null || "".equals(s)) {
@@ -130,6 +447,7 @@ public class Solution {
         int len = s.length();
         int begin = 0;
         boolean[][] dp = new boolean[len][len];
+        //设置对角线为true
         for (int i = 0; i < len; i++) {
             dp[i][i] = true;
         }
@@ -157,8 +475,12 @@ public class Solution {
 
     /**
      * Z字形变换
+     *
+     * @param s
+     * @param numRows
+     * @return
      */
-    public static String convert(String s, int numRows) {
+    public String convert(String s, int numRows) {
         if (numRows == 1) {
             return s;
         }
@@ -183,7 +505,7 @@ public class Solution {
 
 
     /**
-     * 最多盛水容器
+     * 盛最多水的容器
      *
      * @param height
      * @return
@@ -211,24 +533,23 @@ public class Solution {
      * @param heights
      * @return
      */
-    public static int largestRectangleArea(int[] heights) {
+    public int largestRectangleArea(int[] heights) {
         int len = heights.length;
         Stack<Integer> stack = new Stack<>();
-        //淇濆瓨宸﹀彸鍖洪棿
+        //保存左右区间
         int[] left = new int[len];
         int[] right = new int[len];
         Arrays.fill(right, len);
         for (int i = 0; i < len; i++) {
-            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+            while (!stack.isEmpty() && heights[i] < heights[stack.peek()]) {
                 right[stack.peek()] = i;
                 stack.pop();
             }
             left[i] = stack.isEmpty() ? -1 : stack.peek();
-            stack.push(i);
         }
         int res = 0;
         for (int i = 0; i < len; i++) {
-            res = Math.max(res, (right[i] - left[i] - 1) * heights[i]);
+            res = Math.max(res, heights[i] * (right[i] - left[i]));
         }
         return res;
     }
@@ -240,7 +561,7 @@ public class Solution {
      * @param matrix
      * @return
      */
-    public static int maximalRectangle(char[][] matrix) {
+    public int maximalRectangle(char[][] matrix) {
         int m = matrix.length;
         if (m == 0) {
             return 0;
@@ -266,227 +587,209 @@ public class Solution {
         return ret;
     }
 
-    /**
-     * 网络延迟时间Dijkstra
-     *
-     * @param times
-     * @param n
-     * @param k
-     * @return
-     */
-    public static int networkDelayTime(int[][] times, int n, int k) {
-//        System.out.print(k - 1);
-        int max = Integer.MIN_VALUE;
-        //鏋勫缓鐭╅樀
-        int[] road = new int[n];
-        int count = 1;
-        int[][] adjMatrix = new int[n][n];
-        for (int[] matrix : adjMatrix) {
-            Arrays.fill(matrix, -1);
-        }
-        for (int[] time : times) {
-            adjMatrix[time[0] - 1][time[1] - 1] = time[2];
-        }
-        //S鏁扮粍
-        int[] result = new int[adjMatrix.length];
-        boolean[] used = new boolean[adjMatrix.length];
-        //鏍囪瘑k浣滀负椤剁偣
-        used[k - 1] = true;
-        road[0] = k - 1;
-        for (int i = 0; i < adjMatrix.length; i++) {
-            result[i] = adjMatrix[k - 1][i];
-        }
-        for (int i = 0; i < adjMatrix.length; i++) {
-            if (i == (k - 1)) {
-                continue;
-            }
-            int min = Integer.MAX_VALUE;
-            int cur = 0;
-            for (int j = 0; j < adjMatrix.length; j++) {
-                //绗琷涓繕娌℃湁閬嶅巻鍒�
-                if (!used[j] && result[j] != -1 && result[j] < min) {
-                    min = result[j];
-                    cur = j;
-                }
-            }
-//            System.out.print("--->" + cur);
-            road[count] = cur;
-            count++;
-            //鏇存柊U鏁扮粍
-            used[cur] = true;
-            for (int j = 0; j < adjMatrix.length; j++) {
-                if (!used[j]) {
-                    if (adjMatrix[cur][j] != -1 && (result[j] > min + adjMatrix[cur][j] || result[j] == -1)) {
-                        result[j] = min + adjMatrix[cur][j];
-                    }
-                }
-            }
-
-        }
-        Set<String> set = new HashSet<>();
-        for (int[] time : times) {
-            set.add(String.valueOf(time[0] - 1) + '-' + (time[1] - 1));
-        }
-        for (int i = 0; i < road.length - 1; i++) {
-            if (!set.contains(String.valueOf(road[i]) + '-' + road[i + 1])) {
-                return -1;
-            }
-        }
-        for (int i : result) {
-            max = Math.max(max, i);
-        }
-//        System.out.println("\n");
-        return max > Integer.MAX_VALUE / 2 ? -1 : max;
-    }
-
-
-    public static int networkDelayTime1(int[][] times, int n, int k) {
-        final int INF = Integer.MAX_VALUE / 2;
-        int[][] g = new int[n][n];
-        for (int i = 0; i < n; ++i) {
-            Arrays.fill(g[i], INF);
-        }
-        for (int[] t : times) {
-            g[t[0] - 1][t[1] - 1] = t[2];
-        }
-
-        int[] dist = new int[n];
-        Arrays.fill(dist, INF);
-        dist[k - 1] = 0;
-        boolean[] used = new boolean[n];
-        for (int i = 0; i < n; ++i) {
-            int x = -1;
-            for (int y = 0; y < n; ++y) {
-                if (!used[y] && (x == -1 || dist[y] < dist[x])) {
-                    x = y;
-                }
-            }
-            System.out.print("-->" + (x + 1));
-            used[x] = true;
-            for (int y = 0; y < n; ++y) {
-                dist[y] = Math.min(dist[y], dist[x] + g[x][y]);
-            }
-        }
-
-        int ans = Arrays.stream(dist).max().getAsInt();
-        System.out.println("\n");
-        return ans == INF ? -1 : ans;
-    }
-
 
     /**
-     * 鎵旈浮铔� 閫掑綊瑙ｆ硶dp[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
+     * 全排列(深度搜索+回溯法)
      *
-     * @param k
-     * @param n
+     * @param nums
      * @return
      */
-    HashMap<String, Integer> map = new HashMap<>();
+    public List<List<Integer>> permute(int[] nums) {
+        int len = nums.length;
+        List<List<Integer>> res = new ArrayList<>();
+        if (len == 0) {
+            return res;
+        }
+        boolean[] used = new boolean[len];
+        List<Integer> path = new ArrayList<>();
 
-    public int superEggDrop1(int k, int n) {
-
-        if (k == 1) {
-            return n;
-        }
-        if (n == 0) {
-            return 0;
-        }
-        if (map.containsKey(k + "-" + n)) {
-            return map.get(k + "-" + n);
-        }
-        int res = n;
-        for (int i = 1; i <= n; i++) {
-            int maxFloor = Math.max(superEggDrop(k, n - i), superEggDrop(k - 1, i - 1)) + 1;
-            res = Math.min(res, maxFloor);
-        }
-        map.put(k + "-" + n, res);
-
+        dfs(nums, 0, len, path, used, res);
         return res;
     }
 
-
-    /**
-     * 鍔ㄦ�佽鍒掕В娉昫p[k][n] = min(max(dp[k-1][i-1],dp[k][n-i])+1)
-     *
-     * @param k
-     * @param n
-     * @return
-     */
-    public int superEggDrop(int k, int n) {
-        int dp[][] = new int[k + 1][n + 1];
-        //鍙湁涓�涓浮铔嬬殑鏃跺�欙紝鏈�澶氶渶瑕乶娆�;娌℃湁楦¤泲鐨勬椂鍊欙紝閮芥槸0娆�
-        for (int i = 0; i <= n; i++) {
-            dp[0][i] = 0;
-            dp[1][i] = i;
+    private void dfs(int[] nums, int depth, int len, List<Integer> path, boolean[] used, List<List<Integer>> res) {
+        if (depth == len) {
+            res.add(new ArrayList<>(path));
+            return;
         }
-        //鍙湁0灞傜殑鏃跺�欙紝閮芥槸0娆�
-        for (int i = 0; i <= k; i++) {
-            dp[i][0] = 0;
-        }
-        for (int i = 2; i <= k; i++) {
-            for (int j = 1; j <= n; j++) {
-                int min = Integer.MAX_VALUE;
-                for (int x = 1; x <= j; x++) {
-                    min = Math.min(min, Math.max(dp[i - 1][x - 1], dp[i][j - x]) + 1);
-                }
-                dp[i][j] = min;
+        for (int i = 0; i < len; i++) {
+            if (!used[i]) {
+                path.add(nums[i]);
+                used[i] = true;
+                System.out.println("递归之前>>>>" + path);
+                dfs(nums, depth + 1, len, path, used, res);
+                used[i] = false;
+                path.remove(path.size() - 1);
+                System.out.println("递归之后>>>>" + path);
             }
         }
-        return dp[k][n];
-    }
-
-    /**
-     * 鏂愭尝閭ｅ鏁板垪鎸囬拡瑙ｆ硶
-     *
-     * @param n
-     * @return
-     */
-    public static int fib1(int n) {
-        if (n < 2) {
-            return n;
-        }
-        int p = 0, q = 0, r = 1;
-        for (int i = 2; i <= n; i++) {
-            p = q;
-            q = r;
-            r = p + q;
-        }
-        return r;
-    }
-
-    /**
-     * 鏂愭尝閭ｅ鍔ㄦ�佽鍒掕В娉�
-     *
-     * @param n
-     * @return
-     */
-    public static int fib(int n) {
-        if (n < 1) {
-            return n;
-        }
-        int[] arr = new int[n];
-        return fn(arr, n);
-    }
-
-    private static int fn(int[] arr, int n) {
-        if (n == 1 || n == 2) {
-            return 1;
-        }
-        if (arr[n - 1] != 0) {
-            return arr[n - 1];
-        }
-        arr[n - 1] = fn(arr, n - 1) + fn(arr, n - 2);
-        return arr[n - 1];
     }
 
 
     /**
-     * 鎷彿鐢熸垚锛堟毚鍔涜В娉曪級
+     * 求二叉树的最大深度(BFS广度搜索)
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int index = 0;
+            int size = queue.size();
+            while (index < size) {
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+                index++;
+            }
+            count++;
+        }
+        return count;
+    }
+
+
+    /**
+     * 求二叉树的最大深度（递归法）
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth1(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepth1(root.left), maxDepth1(root.right)) + 1;
+    }
+
+
+    /**
+     * Dijkstra算法，求遍历图的最短路径（可用于有向图和无向图）
+     *
+     * @param arr 图的数组
+     * @param n   顶点数
+     * @return
+     */
+    public static int[] dijkstra(int[][] arr, int n) {
+        //将图转化为邻接矩阵
+        int[][] graph = new int[n][n];
+        for (int i = 0; i < graph.length; i++) {
+            //将无法到达的路径填充为-1
+            Arrays.fill(graph[i], -1);
+        }
+        for (int[] child : arr) {
+            graph[child[0] - 1][child[1] - 1] = child[2];
+        }
+        //记录顶点到下一个顶点的距离
+        int[] result = new int[n];
+        //记录当前点是否已经遍历
+        boolean[] used = new boolean[n];
+        //从顶点0开始遍历
+        used[0] = true;
+        System.out.print(1);
+        for (int i = 0; i < graph.length; i++) {
+            result[i] = graph[0][i];
+        }
+        //保存路径
+        for (int i = 1; i < graph.length; i++) {
+            int min = Integer.MAX_VALUE;
+            int k = 0;
+            for (int j = 1; j < graph.length; j++) {
+                //找出下一个最短路径的节点
+                if (!used[j] & (result[j] != -1) && (result[j] < min)) {
+                    min = result[j];
+                    k = j;
+                }
+            }
+            used[k] = true;
+            System.out.print("-->" + (k + 1));
+            for (int j = 1; j < graph.length; j++) {
+                if (!used[j]) {
+                    //更新顶点到其他顶点的最短距离
+                    if ((graph[k][j] != -1) && ((min + graph[k][j]) < result[j] || (result[j] == -1))) {
+                        result[j] = min + graph[k][j];
+                    }
+                }
+            }
+        }
+        int max = Integer.MIN_VALUE;
+        for (int i : result) {
+            max = Math.max(max, i);
+        }
+        System.out.println("\n" + "最短路径为：" + max);
+        return result;
+    }
+
+
+    /**
+     * 返回前k个出现次数最多的元素，最小堆揭发
+     *
+     * @param words
+     * @param k
+     * @return
+     */
+    public static List<String> topKFrequent(String[] words, int k) {
+        List<String> result = new ArrayList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+        PriorityQueue<Map.Entry<String, Integer>> priorityQueue = new PriorityQueue<>(
+                (o1, o2) -> (o1.getValue() == o2.getValue() ? o2.getKey().compareTo(o1.getKey()) : o1.getValue() - o2.getValue()));
+        map.entrySet().forEach(priorityQueue::offer);
+        while (!priorityQueue.isEmpty()) {
+            result.add(priorityQueue.poll().getKey());
+        }
+        int len = result.size() - k;
+        for (int i = 0; i < len; i++) {
+            result.remove(0);
+        }
+        Collections.reverse(result);
+        return result;
+    }
+
+
+    /**
+     * KMP算法
+     *
+     * @param pat
+     * @param txt
+     * @return
+     */
+    public static int KMPsearch(String pat, String txt) {
+        int N = txt.length();
+        int M = pat.length();
+        for (int i = 0; i < N - M; i++) {
+            int j = 0;
+            for (; j < M; j++) {
+                if (pat.charAt(j) != txt.charAt(i + j)) {
+                    break;
+                }
+            }
+            if (j == M) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * 括号生成
      *
      * @param n
      * @return
      */
-    public static List<String> generateParenthesis1(int n) {
+    public static List<String> generateParenthesis(int n) {
         List<String> result = new ArrayList<>();
         generateALL(new char[n * 2], 0, result);
         return result;
@@ -522,256 +825,90 @@ public class Solution {
 
 
     /**
-     * 鎷彿鐢熸垚锛堝洖婧硶锛�
+     * 编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+     * <p>
+     * 每行中的整数从左到右按升序排列。
+     * 每行的第一个整数大于前一行的最后一个整数。
+     * 使用二分法来实现
      *
-     * @param n
+     * @param matrix
+     * @param target
      * @return
      */
-    public static List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        backtrack(new StringBuffer(), res, 0, 0, n);
-        return res;
-    }
-
-    private static void backtrack(StringBuffer cur, List<String> res, int left, int right, int n) {
-        if (cur.length() == 2 * n) {
-            res.add(cur.toString());
-            return;
-        }
-        if (left < n) {
-            cur.append('(');
-            backtrack(cur, res, left + 1, right, n);
-            cur.deleteCharAt(cur.length() - 1);
-        }
-        if (right < left) {
-            cur.append(')');
-            backtrack(cur, res, left, right + 1, n);
-            cur.deleteCharAt(cur.length() - 1);
-        }
-    }
-
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
-
-    /**
-     * 浜屽弶鏍戝厛搴忛亶鍘�(閫掑綊娉�)
-     *
-     * @param root
-     * @return
-     */
-    public List<Integer> preorderTraversal1(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
-        preOrder(root, res);
-        return res;
-    }
-
-    private void preOrder(TreeNode root, List<Integer> res) {
-        if (root == null) {
-            return;
-        }
-        res.add(root.val);
-        preOrder(root.left, res);
-        preOrder(root.right, res);
-    }
-
-
-    /**
-     * 浜屽弶鏍戠殑鍏堝簭閬嶅巻锛堟暟鎹粨鏋勬硶锛�
-     *
-     * @param root
-     * @return
-     */
-    public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
-        if (root == null) {
-            return res;
-        }
-        Stack<TreeNode> stack = new Stack<>();
-        TreeNode node = root;
-        while (!stack.isEmpty() || node != null) {
-            while (node != null) {
-                res.add(node.val);
-                stack.push(node);
-            }
-            node = stack.pop();
-            node = node.right;
-        }
-        return res;
-    }
-
-    /**
-     * 二叉树展开为链表
-     *
-     * @param root
-     */
-    public void flatten(TreeNode root) {
-        //前序展开既是
-        List<TreeNode> res = new ArrayList<>();
-        preOrderTravels(root, res);
-        TreeNode head = new TreeNode(0);
-        for (TreeNode re : res) {
-            re.left = null;
-            head.right = re;
-            head = head.left;
-        }
-    }
-
-    private void preOrderTravels(TreeNode root, List<TreeNode> res) {
-        res.add(root);
-        preOrderTravels(root.left, res);
-        preOrderTravels(root.right, res);
-    }
-
-
-    /**
-     * 前k个单词
-     *
-     * @param words
-     * @param k
-     * @return
-     */
-    public static List<String> topKFrequent(String[] words, int k) {
-        List<String> result = new ArrayList<>();
-        HashMap<String, Integer> map = new HashMap<>();
-        for (String word : words) {
-            map.put(word, map.getOrDefault(word, 0) + 1);
-        }
-        PriorityQueue<Map.Entry<String, Integer>> priorityQueue = new PriorityQueue<>(
-                (o1, o2) -> (o1.getValue() == o2.getValue() ? o2.getKey().compareTo(o1.getKey()) : o1.getValue() - o2.getValue()));
-        map.entrySet().forEach(priorityQueue::offer);
-        while (!priorityQueue.isEmpty()) {
-            result.add(priorityQueue.poll().getKey());
-        }
-        int len = result.size() - k;
-        for (int i = 0; i < len; i++) {
-            result.remove(0);
-        }
-        Collections.reverse(result);
-        return result;
-    }
-
-
-    public static HashMap<Integer, Integer> treeMap = new HashMap<>();
-
-    /**
-     * 给定二叉树的前序遍历和中序遍历结果，生成二叉树
-     * Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
-     * Output: [3,9,20,null,null,15,7]
-     * 1、首先二叉树的前序遍历结果中，第一个节点就是根节点
-     * 2、在二叉树中序遍历结果中找出根节点所在的下标，则左边的为左子树，右边的为右子树
-     * 3、每一个左子树序列又能在前序中找出根节点，依次循环1、2、3即可完成二叉树的创建
-     *
-     * @param preorder
-     * @param inorder
-     * @return
-     */
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        int len = preorder.length;
-
-        //将中序结果保存在一个字典中
-        for (int i = 0; i < inorder.length; i++) {
-            treeMap.put(inorder[i], i);
-        }
-        return build(preorder, 0, len - 1, inorder, 0, len - 1);
-
-    }
-
-    public TreeNode build(int[] preorder, int pre_left, int pre_right, int[] inorder, int in_left, int in_right) {
-        if (pre_left > pre_right) {
-            return null;
-        }
-        //前序遍历结果根节点所在的位置为第一个，试想：假如换成后序遍历，则最后一个为根节点
-        int pre_root = 0;
-        //中序遍历结果中根节点所在的位置
-        int in_root = treeMap.get(preorder[pre_root]);
-        //左子树的长度
-        int left_size = in_root - in_left;
-        TreeNode root = new TreeNode(preorder[pre_root]);
-        //找出前序和中序遍历结果中的左子树
-        root.left = build(preorder, pre_left + 1, pre_left + left_size, inorder, in_right, left_size - 1);
-        //找出前序和中序遍历结果中的右子树
-        root.right = build(preorder, pre_left + left_size + 1, pre_right, inorder, left_size + 1, in_right);
-        return root;
-    }
-
-
-    /**
-     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
-     *
-     * @param l1
-     * @param l2
-     * @return
-     */
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode head = null, tail = null;
-        int flag = 0;
-        while (l1 != null || l2 != null) {
-            int n1 = l1 != null ? l1.val : 0;
-            int n2 = l2 != null ? l2.val : 0;
-            int sum = n1 + n2 + flag;
-            if (head == null) {
-                head = tail = new ListNode(sum % 10);
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        int left = 0, right = m * n - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int cur = matrix[mid / n][mid % n];
+            if (cur < target) {
+                left = mid + 1;
+            } else if (cur > target) {
+                right = mid - 1;
             } else {
-                tail.next = new ListNode(sum % 10);
-                tail = tail.next;
-            }
-            flag = sum / 10;
-            if (l1 != null) {
-                l1 = l1.next;
-            }
-            if (l2 != null) {
-                l2 = l2.next;
+                return true;
             }
         }
-        if (flag > 0) {
-            tail.next = new ListNode(flag);
-        }
-        return head;
+        return false;
     }
 
 
     /**
-     * 寻找最长重复子串
-     * 1、递归找出所有的子串
-     * 2、KMP算法
+     * 给定一个字符串 s 和一些 长度相同 的单词 words 。找出 s 中恰好可以由 words 中所有单词串联形成的子串的起始位置。
+     * <p>
+     * 注意子串要与 words 中的单词完全匹配，中间不能有其他字符 ，但不需要考虑 words 中单词串联的顺序。
+     * 回溯法超出内存
      *
      * @param s
+     * @param words
      * @return
      */
-    public static String longestDupSubstring(String s) {
-        int max = Integer.MIN_VALUE;
-        String result = "";
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = i + 1; j <= s.length(); j++) {
-                String p = s.substring(i, j);
-                System.out.println(p);
-                //此时以子串将源串分为左右两个，假如任何一个中存在子串，则返回结果
-                if (searchChild(i, j, s, p)) {
-                    if ((j - i) > max) {
-                        max = j - i;
-                        result = s.substring(i, j);
-                    }
+    public static List<Integer> findSubstring(String s, String[] words) {
+        HashSet set;
+        int len = words.length;
+        List<List<String>> res = new ArrayList<>();
+        List<String> path = new ArrayList<>();
+        boolean[] used = new boolean[len];
+        findChildren(words, 0, len, path, used, res);
+        List<String> transfer = new ArrayList<>();
+        for (List<String> string : res) {
+            transfer.add((String.join("", string)));
+        }
+        set = findChildrenPosition(s, transfer);
+        return new ArrayList<>(set);
+    }
+
+    private static HashSet findChildrenPosition(String s, List<String> transfer) {
+        int sLen = s.length();
+        HashSet<Integer> set = new HashSet<>();
+        for (String p : transfer) {
+            int pLen = p.length();
+            for (int i = 0; i <= (sLen - pLen); i++) {
+                String str = s.substring(i, i + pLen);
+                if (p.equals(str)) {
+                    set.add(i);
                 }
             }
         }
-        return result;
+        return set;
+    }
+
+    public static void findChildren(String[] words, int depth, int len, List<String> path, boolean[] used, List<List<String>> res) {
+        if (depth == len) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < len; i++) {
+            if (!used[i]) {
+                path.add(words[i]);
+                used[i] = true;
+                System.out.println("回溯前>>" + path);
+                findChildren(words, depth + 1, len, path, used, res);
+                used[i] = false;
+                path.remove(path.size() - 1);
+                System.out.println("回溯后>>" + path);
+            }
+        }
     }
 
     private static boolean searchChild(int i, int j, String s, String p) {
@@ -782,61 +919,7 @@ public class Solution {
         System.out.println("right:" + right);
         System.out.println("===============================================");
         return (left.indexOf(p) != -1 || right.indexOf(p) != -1);
-    }
 
-
-    /**
-     * 第30题：串联所有的单词
-     *
-     * @param s
-     * @param words
-     * @return
-     */
-    public static List<Integer> findSubstring(String s, String[] words) {
-        List<Integer> result = new ArrayList<>();
-        if (s == null || s.length() == 0 || words == null || words.length == 0) {
-            return result;
-        }
-        HashMap<String, Integer> map = new HashMap<>();
-        for (String word : words) {
-            map.put(word, map.getOrDefault(word, 0) + 1);
-        }
-        int wordLength = words[0].length();
-        int allWordLength = words.length * wordLength;
-        for (int i = 0; i < s.length() - allWordLength + 1; i++) {
-            String curStr = s.substring(i, i + allWordLength);
-            HashMap<String, Integer> curMap = new HashMap<>();
-            for (int j = 0; j < curStr.length(); j += wordLength) {
-                String childWord = curStr.substring(j, j + wordLength);
-                curMap.put(childWord, curMap.getOrDefault(childWord, 0) + 1);
-            }
-            if (map.equals(curMap)) {
-                result.add(i);
-            }
-        }
-        return result;
-    }
-
-
-    /**
-     * 第45题：跳跃游戏
-     *
-     * @param nums
-     * @return
-     */
-    public static int jump(int[] nums) {
-        int position = nums.length - 1;
-        int step = 0;
-        while (position > 0) {
-            for (int i = 0; i < position; i++) {
-                if (i + nums[i] >= position) {
-                    position = i;
-                    step++;
-                    break;
-                }
-            }
-        }
-        return step;
     }
 
 
@@ -872,129 +955,186 @@ public class Solution {
         return ans;
     }
 
-    public static int jump1(int[] nums) {
-        int length = nums.length - 1;
-        int maxStep = 0;
-        int end = 0;
-        int step = 0;
-        for (int i = 0; i < length - 1; i++) {
-            maxStep = Math.max(maxStep, nums[i] + i);
-            if (i == end) {
-                end = maxStep;
-                step++;
+
+    private static boolean checkMap(HashMap<Character, Integer> sMap, HashMap<Character, Integer> tMap) {
+        for (Map.Entry<Character, Integer> entry : tMap.entrySet()) {
+            if (!sMap.containsKey(entry.getKey()) || sMap.get(entry.getKey()) < entry.getValue()) {
+                return false;
             }
         }
-        return step;
+        return true;
     }
 
 
     /**
-     * 第4题：寻找两个正序数组的中位数
+     * 第56题：合并区间
      *
-     * @param A
-     * @param B
+     * @param intervals
      * @return
      */
-    public static double findMedianSortedArrays(int[] A, int[] B) {
-        int m = A.length;
-        int n = B.length;
-        int len = m + n;
-        int left = -1, right = -1;
-        int aStart = 0, bStart = 0;
-        for (int i = 0; i <= len / 2; i++) {
-            left = right;
-            if (aStart < m && (bStart >= n || A[aStart] < B[bStart])) {
-                right = A[aStart++];
+    public static int[][] merge(int[][] intervals) {
+        int[][] res = new int[intervals.length][2];
+        Arrays.sort(intervals, Comparator.comparingInt(v -> v[0]));
+        int index = -1;
+        for (int i = 0; i < intervals.length; i++) {
+            if (index == -1 || intervals[i][0] > res[index][1]) {
+                res[++index] = intervals[i];
             } else {
-                right = B[bStart++];
+                res[index][1] = Math.max(res[index][1], intervals[i][1]);
             }
         }
-        if ((len & 1) == 0)
-            return (left + right) / 2.0;
-        else
-            return right;
+        return Arrays.copyOf(res, index + 1);
     }
 
 
     /**
-     * 第7题：整数反转
+     * 第50题：Pow(x,n)
      *
      * @param x
+     * @param n 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn）。
      * @return
      */
-    public static int reverse(int x) {
-        int ans = 0;
-        while (x != 0) {
-            if (ans < Integer.MIN_VALUE / 10 || ans > Integer.MAX_VALUE / 10) {
-                return 0;
-            }
-            ans = ans * 10 + x % 10;
-            x = x / 10;
+    public static double myPow(double x, int n) {
+        return n >= 0 ? quickPow(x, n) : 1 / quickPow(x, -n);
+    }
+
+    private static double quickPow(double x, int n) {
+        if (n == 0) {
+            return 1.0;
         }
-        return ans;
+        double y = quickPow(x, n / 2);
+        return n % 2 == 0 ? y * y : (y * y * x);
     }
 
 
+    public static int search(int L, int a, long modulus, int n, int[] nums) {
+        long h = 0;
+        for (int i = 0; i < L; ++i) h = (h * a + nums[i]) % modulus;
+        HashSet<Long> seen = new HashSet();
+        seen.add(h);
+        long aL = 1;
+        for (int i = 1; i <= L; ++i) aL = (aL * a) % modulus;
+        for (int start = 1; start < n - L + 1; ++start) {
+            h = (h * a - nums[start - 1] * aL % modulus + modulus) % modulus;
+            h = (h + nums[start + L - 1]) % modulus;
+            if (seen.contains(h)) return start;
+            seen.add(h);
+        }
+        return -1;
+    }
+
     /**
-     * 第9题：回文数
+     * 第1044题：寻找最长重复字串
+     * 二分法？？？？？？？？？？？？？？？？？？？？？
      *
-     * @param x
-     * @return
+     * @param S
      */
-    public static boolean isPalindrome(int x) {
-        String orign = x + "";
-        String reverse = new StringBuffer(orign).reverse().toString();
-        return orign.equals(reverse);
+    public static String longestDupSubstring(String S) {
+        int n = S.length();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; ++i) nums[i] = (int) S.charAt(i) - (int) 'a';
+        int a = 26;
+        long modulus = (long) Math.pow(2, 32);
+        int left = 1, right = n;
+        int L;
+        while (left != right) {
+            L = left + (right - left) / 2;
+            if (search(L, a, modulus, n, nums) != -1) left = L + 1;
+            else right = L;
+        }
+        int start = search(left - 1, a, modulus, n, nums);
+        return start != -1 ? S.substring(start, start + left - 1) : "";
     }
 
 
     /**
-     * 第43题：字符串相乘
+     * 杨辉三角
      *
-     * @param num1
-     * @param num2
+     * @param numRows
      * @return
      */
-    public static String multiply(String num1, String num2) {
-        if ("0".equals(num1) || "0".equals(num2)) {
-            return "0";
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < numRows; ++i) {
+            List<Integer> t = new ArrayList<>();
+            for (int j = 0; j < i + 1; ++j) {
+                boolean firstOrLast = j == 0 || j == i;
+                t.add(firstOrLast ? 1 : 0);
+            }
+            for (int j = 1; j < i; ++j) {
+                int val = res.get(i - 1).get(j - 1) + res.get(i - 1).get(j);
+                t.set(j, val);
+            }
+            res.add(t);
         }
-        int M = num1.length();
-        int N = num2.length();
-        int[] arr1 = new int[M];
-        int[] arr2 = new int[N];
-        int[] res = new int[M + N];
-        for (int i = num1.length() - 1; i >= 0; i--) {
-            arr1[M - 1 - i] = num1.charAt(i) - '0';
+        return res;
+    }
+
+
+    /**
+     * 第1163题： 按字典序排在最后的子串
+     * 1、找出所有的字串
+     * 2、按字典排序，返回第一个
+     *
+     * @param s
+     * @return
+     */
+    List<List<Character>> res1 = new ArrayList<>();
+    List<Character> path1 = new ArrayList<>();
+
+    public String lastSubstring1(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        for (int i = 0; i < (1 << len); i++) {
+            path1.clear();
+            for (int j = 0; j < len; j++) {
+                if ((i & (1 << j)) != 0) {
+                    path1.add(chars[j]);
+                }
+            }
+            res1.add(new ArrayList<>(path1));
         }
-        for (int i = num2.length() - 1; i >= 0; i--) {
-            arr2[N - 1 - i] = num2.charAt(i) - '0';
+        List<String> res = new ArrayList<>();
+        for (List<Character> characters : res1) {
+            StringBuffer sb = new StringBuffer();
+            for (Character character : characters) {
+                sb.append(character);
+            }
+            res.add(sb.toString());
         }
-        for (int i = 0; i < arr1.length; i++) {
-            for (int j = 0; j < arr2.length; j++) {
-                res[i + j] += arr1[i] * arr2[j];
+        res = res.stream().filter(e -> s.indexOf(e) != -1).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return res.get(res.size() - 1);
+    }
+
+
+    /**
+     * 第1163题：按字典序排在最后的字串
+     *
+     * @param s
+     * @return
+     */
+    public String lastSubstring(String s) {
+        int left = 0;
+        int right = left + 1;
+        int step = 0;
+        while (right + step < s.length()) {
+            if (s.charAt(left + step) < s.charAt(right + step)) {
+                left = right;
+                right++;
+                step = 0;
+            } else if (s.charAt(left + step) == s.charAt(right + step)) {
+                step++;
+            } else {
+                right += step + 1;
+                step = 0;
             }
         }
-        int flag = 0;
-        for (int i = 0; i < res.length; i++) {
-            flag += res[i];
-            res[i] = flag % 10;
-            flag /= 10;
-        }
-        int k = res.length - 1;
-        while (k >= 0 && res[k] == 0) {
-            k--;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i <= k; i++) {
-            sb.append(res[i] + "");
-        }
-        return sb.reverse().toString();
+        return s.substring(left);
     }
 
 
     /**
-     * 第10题：正则表达式匹配
+     * 第10题：匹配正则表达式
      *
      * @param s
      * @param p
@@ -1039,27 +1179,254 @@ public class Solution {
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(isMatch("a", "a*"));
-//        System.out.println(isPalindrome(121));
-//        System.out.println(reverse(569));
-//        System.out.println(jump(new int[]{2, 3, 1, 1, 4}));
-//        System.out.println(findMedianSortedArrays(new int[]{}, new int[]{2, 5}));
-//        System.out.println(findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}));
-//        System.out.println(longestDupSubstring("banana"));
-        ;
-//        int[][] times = new int[][]{{2, 1, 1}, {2, 3, 1}, {3, 4, 1}};
-//        int n = 4;
-//        int k = 2;
-//        System.out.println(networkDelayTime1(times, n, k));
-//        System.out.println("hello world");
-//        System.out.println(convert("PAYPALISHIRING", 4));
-//        char[][] arr = new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}};
-//        System.out.println(maximalRectangle(arr));7
-//        for (int i = 0; i < 31; i++) {
-//            System.out.println(fib(i));
+//    public TreeNode buildTree(int[] preorder, int[] inorder) {
+//        int len = preorder.length;
+//        HashMap<Integer, Integer> map = new HashMap<>();
+//        //将中序结果保存在一个字典中
+//        for (int i = 0; i < inorder.length; i++) {
+//            map.put(inorder[i], i);
 //        }
-//        System.out.println(generateParenthesis(3));
+//        return build(preorder, 0, len - 1, inorder, 0, len - 1, map);
+//
+//    }
+//
+//    private TreeNode build(int[] preorder, int pre_left, int pre_right, int[] inorder, int in_left, int in_right, HashMap<Integer, Integer> map) {
+//        if (pre_left > pre_right) {
+//            return null;
+//        }
+//        //前序遍历结果根节点所在的位置为第一个，试想：假如换成后序遍历，则最后一个为根节点
+//        int pre_root = 0;
+//        //中序遍历结果中根节点所在的位置
+//        int in_root = map.get(preorder[pre_root]);
+//        //左子树的长度
+//        int left_size = in_root-in_left;
+//        TreeNode root = new TreeNode(preorder[pre_root]);
+//        //找出前序和中序遍历结果中的左子树
+//        root.left = build(preorder,pre_left+1,pre_left+left_size,inorder,in_right,left_size-1,map);
+//        //找出前序和中序遍历结果中的右子树
+//        root.right = build(preorder,pre_left+left_size + 1,pre_right,inorder,left_size+1,in_right,map);
+//        return root;
+//    }
+
+
+    int[] preorder;
+    HashMap<Integer, Integer> dic = new HashMap<>();
+
+    /**
+     * 构建二叉树
+     *
+     * @param preorder
+     * @param inorder
+     * @return
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        this.preorder = preorder;
+        for (int i = 0; i < inorder.length; i++)
+            dic.put(inorder[i], i);
+        return recur(0, 0, inorder.length - 1);
     }
+
+    TreeNode recur(int root, int left, int right) {
+        if (left > right) return null;                          // 递归终止
+        TreeNode node = new TreeNode(preorder[root]);          // 建立根节点
+        int i = dic.get(preorder[root]);                       // 划分根节点、左子树、右子树
+        node.left = recur(root + 1, left, i - 1);              // 开启左子树递归
+        node.right = recur(root + i - left + 1, i + 1, right); // 开启右子树递归
+        return node;                                           // 回溯返回根节点
+    }
+
+
+    /**
+     * 求最长递增子序列
+     *
+     * @param nums
+     * @return
+     */
+    public static int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        for (int i = 0; i < dp.length; i++) {
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+
+    public int midSearch(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            int mid = left + (left + right) / 2;
+            if (target == nums[mid]) {
+                return i;
+            } else if (target < nums[left]) {
+                right = mid + 1;
+            } else if (target > nums[right]) {
+                left = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 快速排序
+     * @param arr
+     * @param left
+     * @param right
+     * @return
+     */
+    public int[] quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int partitionIndex = partition(arr, left, right);
+            quickSort(arr, left, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, right);
+        }
+        return arr;
+    }
+
+    public int partition(int[] arr, int left, int right) {
+        int pivot = left;
+        int index = pivot + 1;
+        for (int i = index; i <= right; i++) {
+            if (arr[i] < arr[pivot]) {
+                swap(arr, i, index);
+                index++;
+            }
+        }
+        swap(arr, pivot, index - 1);
+        return index - 1;
+    }
+
+    private void swap(int[] arr, int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
+    /**
+     * 第4题：寻找两个正序数组的中位数
+     * @param A
+     * @param B
+     * @return
+     */
+    public double findMedianSortedArrays1(int[] A, int[] B) {
+        int m = A.length;
+        int n = B.length;
+        int len = m + n;
+        int left = -1, right = -1;
+        int aStart = 0, bStart = 0;
+        for (int i = 0; i <= len / 2; i++) {
+            left = right;
+            if (aStart < m && (bStart >= n || A[aStart] < B[bStart])) {
+                right = A[aStart++];
+            } else {
+                right = B[bStart++];
+            }
+        }
+        if ((len & 1) == 0)
+            return (left + right) / 2.0;
+        else
+            return right;
+    }
+
+    /**
+     * 第4题：寻找两个正序数组的中位数
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
+        int length1 = nums1.length, length2 = nums2.length;
+        int totalLength = length1 + length2;
+        if (totalLength % 2 == 1) {
+            int midIndex = totalLength / 2;
+            double median = getKthElement(nums1, nums2, midIndex + 1);
+            return median;
+        } else {
+            int midIndex1 = totalLength / 2 - 1, midIndex2 = totalLength / 2;
+            double median = (getKthElement(nums1, nums2, midIndex1 + 1) + getKthElement(nums1, nums2, midIndex2 + 1)) / 2.0;
+            return median;
+        }
+    }
+
+    public int getKthElement(int[] nums1, int[] nums2, int k) {
+        /* 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
+         * 这里的 "/" 表示整除
+         * nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-2] 共计 k/2-1 个
+         * nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-2] 共计 k/2-1 个
+         * 取 pivot = min(pivot1, pivot2)，两个数组中小于等于 pivot 的元素共计不会超过 (k/2-1) + (k/2-1) <= k-2 个
+         * 这样 pivot 本身最大也只能是第 k-1 小的元素
+         * 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
+         * 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
+         * 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
+         */
+        int length1 = nums1.length, length2 = nums2.length;
+        int index1 = 0, index2 = 0;
+
+        while (true) {
+            // 边界情况
+            if (index1 == length1) {
+                return nums2[index2 + k - 1];
+            }
+            if (index2 == length2) {
+                return nums1[index1 + k - 1];
+            }
+            if (k == 1) {
+                return Math.min(nums1[index1], nums2[index2]);
+            }
+
+            // 正常情况
+            int half = k / 2;
+            int newIndex1 = Math.min(index1 + half, length1) - 1;
+            int newIndex2 = Math.min(index2 + half, length2) - 1;
+            int pivot1 = nums1[newIndex1], pivot2 = nums2[newIndex2];
+            if (pivot1 <= pivot2) {
+                k -= (newIndex1 - index1 + 1);
+                index1 = newIndex1 + 1;
+            } else {
+                k -= (newIndex2 - index2 + 1);
+                index2 = newIndex2 + 1;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+//        System.out.println(lengthOfLIS(new int[]{1,5,7,9,2,4,6,7,4,6}));
+//        System.out.println("kangbinqiang".indexOf("kang") != -1);
+//        System.out.println(solution.lastSubstring("vmjtxddvzmwrjvfamgpoowncslddrkjhchqswkamnsitrcmnhn"));
+//        System.out.println(longestDupSubstring("kangbinqiangbinqiang"));
+//        System.out.println(generate(6));
+//        System.out.println(merge(new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}}));
+//        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
+//        String[] strs = new String[]{"hello","hello world","hello China"};
+//        System.out.println(longestCommonPrefix(strs));
+//        System.out.println(invalidTransactions(new String[]{"bob,689,1910,barcelona", "alex,696,122,bangkok", "bob,832,1726,barcelona", "bob,820,596,bangkok", "chalicefy,217,669,barcelona", "bob,175,221,amsterdam"}));
+//        System.out.println(trap1(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+//        System.out.println(primser(12));
+//        int[] nums = {1, 2, 3};
+//        Solution solution = new Solution();
+//        List<List<Integer>> lists = solution.permute(nums);
+//        int[][] graph = new int[][]{{1, 3, 10}, {1, 5, 30}, {1, 6, 100}, {2, 3, 5}, {3, 4, 50}, {4, 6, 10}, {5, 6, 60}, {5, 4, 20}};
+//        dijkstra(graph, 6);
+//        System.out.println(dijkstra(graph,6));
+//        String[] graph = new String[]{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"};
+//        System.out.println(topKFrequent(graph, 2));
+//        System.out.println(KMPsearch("i","kangbinqiang"));
+
+//        System.out.println(generateParenthesis(3));
+//        System.out.println(longestDupSubstring("hello"));
+//        System.out.println(findSubstring("foobarffsfsdfsdfsdfsdfsfsdfsoobar", new String[]{"kang", "bin", "qiang"}));
+//        System.out.println(generateParenthesis(4));
+        System.out.println(solution.quickSort(new int[]{3,67,4,7,8,23,54,9},0,7));
+    }
+
 
 }
